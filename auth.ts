@@ -17,6 +17,9 @@ export const {
 } = NextAuth({
   providers: [GitHub],
   callbacks: {
+    redirect: ({ url, baseUrl }) => {
+      return process.env.NEXTAUTH_URL || baseUrl
+    },
     jwt({ token, profile }) {
       if (profile) {
         token.id = profile.id
