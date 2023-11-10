@@ -55,11 +55,18 @@ export async function POST(req: Request) {
           }
         ]
       }
-      await kv.hmset(`chat:${id}`, payload)
-      await kv.zadd(`user:chat:${userId}`, {
-        score: createdAt,
-        member: `chat:${id}`
-      })
+      try {
+        const parsedPayload = JSON.stringify(payload)
+        await fetch('https://vercel-ai-mf6v.onrender.com/api/chat', {
+          method: 'POST',
+          body: parsedPayload,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      } catch (err) {
+        console.log(err)
+      }
     }
   })
 
